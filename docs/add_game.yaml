@@ -1,0 +1,16 @@
+Add a video game to the database
+---
+security:
+  - bearerAuth: []
+tags:
+ - Add game
+parameters:
+  - in: path
+    name: name
+    schema:
+      type: string
+    required: true
+    description: Name of the game
+responses:
+  200:
+    description: Returns newly added video game

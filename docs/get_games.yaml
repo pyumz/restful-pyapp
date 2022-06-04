@@ -1,0 +1,10 @@
+Gets video games
+---
+security:
+  - bearerAuth: []
+tags:
+ - Get Games
+description: Retrieves a list of all video games
+responses:
+  200:
+    description: Retrieves a list of all video games
