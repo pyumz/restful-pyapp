@@ -26,3 +26,7 @@ swagger_config = {
 }
 
 swagger = Swagger(app, config=swagger_config)
+
+if __name__ == '__main__':
+    database.create_table()
+    app.run()
