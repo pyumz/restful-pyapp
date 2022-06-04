@@ -16,15 +16,17 @@ You will need the following tools installed on your local machine:
 - Python3 (Install Doc: https://www.python.org/downloads/)
 - Docker (Install Doc: https://docs.docker.com/get-docker/)
 
-# APIs
+# Game APIs
+List of API calls that can be made to interact with the app
 
 ``` 
 Name                    |   Method      |
-/games                  |    GET        
-/games/<game_id>        |    GET
-/games/add              |    POST
-/games/update<game_id>  |    PUT
-/games/delete/>game_id> |    DELETE
+/games                  |    GET        |
+/games/<game_id>        |    GET        |
+/games/add              |    POST       |
+/games/update<game_id>  |    PUT        |
+/games/delete/>game_id> |    DELETE     |
+/swagger
 ```
 
 # How To(s):
@@ -34,14 +36,14 @@ Name                    |   Method      |
 You can run the following command to install the depdendencies via your favorite terminmal tool:
 
 ```
-cd '/path/to/restful-pyapp/`
+cd '/path/to/restful-pyapp/app`
 
 pip install -r requirements.txt
 
 ###
 Set environment variable `FLASK_APP`
 ###
-export FLASK_APP=main.py
+export FLASK_APP=../main.py
 ``` 
 
 Once that is complete you can run the app with:
@@ -56,8 +58,15 @@ Visit a browser and you will see a simple welcome message!
 
 ![Welcome](/docs/img/games_welcome.png)
 
-
 ## Use the APIs
 You can either run `curl` commands from your terminal or use your favorite API testing tool such as Postman.
 
-The APIs 
+For example to get a list of all video games from the database:
+
+![postman](./docs/img/postman.png)
+
+
+# Swagger
+More information on the APIs can be found in the Swagger UI
+
+![swagger](./docs/img/swagger.png)
