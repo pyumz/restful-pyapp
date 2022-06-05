@@ -1,0 +1,110 @@
+---
+- name: Playbook to deploy docker image on kubernetes provisioned by minikube
+  hosts: localhost
+  gather_facts: False
+
+  vars:
+    image_name: games-api
+    image_tag: latest
+    k8s_namespace: games-api
+
+
+  pre_tasks:
+    - name: install pre-requisites
+      pip:
+        name:
+        - openshift
+    
+    - name: check minikube status
+      command: minikube status
+      register: minikube_status
+      changed_when: false
+      ignore_errors: true
+
+    - name: Start minikube if it is not running
+      command: minikube start --vm = true
+      when: "'Running' not in minikube_status.stdout"
+  
+  tasks:
+    - name: Find existing image hash
+      shell: |
+        eval $(minikube docker-env)
+        docker images -q {{ image_name }}
+      register: image_hash
+      changed_when: false
+
+    - name: Build docker image if not yet exists
+      shell: |
+        eval $(minikube docker-env)
+        docker build --tag {{ image_name }}:{{ image_tag }} .
+      when: not image_hash.stdout
+      args:
+        chdir: ../..
+
+    - name: Create a Kubernetes Namespace
+      k8s:
+        name: "{{ k8s_namespace }}"
+        api_version: v1
+        kind: Namespace
+        state: present
+    
+    - name: Create a Kubernetes service for games-api
+      k8s:
+        state: present
+        definition:
+          api_version: v1
+          kind: Service
+          metadata:
+            name: games-api
+            namespace: "{{ k8s_namespace }}"
+            labels:
+              app: games-api
+              env: dev
+          spec:
+            type: LoadBalancer
+            selector:
+              app: games-api
+            ports:
+            - protocol: TCP
+              targetPort: 5000
+              name: port-5000
+              port: 5000
+    
+    - name: Create a Kubernetes deployment
+      k8s:
+        state: present
+        definition:
+          api_version: v1
+          kind: Deployment
+          metadata:
+            name: games-api
+            namespace: "{{ k8s_namespace }}"
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: games-api
+            template:
+              metadata:
+                labels:
+                  app: games-api
+              spec:
+                containers:
+                - name: games-api
+                  image: "{{ image_name }}:{{ image_tag }}"
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                  - containerPort: 8000
+    
+  post_tasks:
+    - name: Ensure pods are running
+      k8s_facts:
+        namespace: "{{ k8s_namespace }}"
+        kind: Pod
+        label_selectors:
+          - app=games-api
+      register: pods
+      until: pods.resources[0].status.phase == 'Running'
+
+    - debug:
+        msg: "Deployment Complete!"
