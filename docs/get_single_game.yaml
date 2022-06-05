@@ -1,0 +1,10 @@
+Gets a single video game
+---
+security:
+  - bearerAuth: []
+tags:
+ - Get a video game
+description: Retrieves a video game based on its ID
+responses:
+  200:
+    description: Video game found

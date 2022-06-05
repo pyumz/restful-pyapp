@@ -3,7 +3,7 @@ Gets video games
 security:
   - bearerAuth: []
 tags:
- - Get Games
+ - Get All Video Games
 description: Retrieves a list of all video games
 responses:
   200:

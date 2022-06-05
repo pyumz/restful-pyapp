@@ -1,10 +1,17 @@
-Add a video game to the database
+Delete video games
 ---
 security:
   - bearerAuth: []
 tags:
- - Add game
+ - Delete Games
+description: Deletes a video game
 parameters:
+  - in: path
+    name: game_id
+    schema:
+      type: string
+    required: true
+    description: ID of the game
   - in: path
     name: name
     schema:
@@ -37,4 +44,5 @@ parameters:
     description: Year game was released
 responses:
   200:
-    description: Returns newly added video game
+    description: Deletes a video game
+

@@ -24,8 +24,8 @@ def update_game(game):
         database = db_connect()
         cursor = database.cursor()
 
-        update_statement = "UPDATE vgames SET name = ?, publisher = ?, rating = ?, price = ?, year = ?"
-        cursor.execute(update_statement, (game['name'], game['publisher'], game['rating'], game['price'], game['year']))
+        update_statement = "UPDATE vgames SET name = ?, publisher = ?, rating = ?, price = ?, year = ? WHERE game_id=?"
+        cursor.execute(update_statement, (game['name'], game['publisher'], game['rating'], game['price'], game['year'], game['game_id']))
         database.commit()
 
         
