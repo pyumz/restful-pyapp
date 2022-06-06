@@ -23,7 +23,7 @@
     - name: build image
       docker_image:
         name: games-api:latest
+        source: build
         build:
           path: /root/restful-pyapp
-          source: build
         state: present
