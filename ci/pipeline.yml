@@ -1,0 +1,41 @@
+---
+resource_types:
+  - name: ansible-playbook
+    type: docker-image
+    source:
+      repository: troykinsella/concourse-ansible-playbook-resource
+      tag: latest
+
+resources:
+  - name: ansible
+    type: ansible-playbook
+    icon: docker
+    source:
+      debug: false
+      verbose: v
+  
+  - name: python
+    type: docker-image
+    source:
+      repository: python
+
+  - name: restful-pyapp
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:pyumz/restful-pyapp.git
+      branch: main
+      private_key: # insert GH Private Key here
+
+
+jobs:
+- name: ansible-build-docker-image
+  plan:
+    - get: restful-pyapp
+    - get: python
+    - put: ansible
+      params:
+        playbook: build_image.yml
+        path: restful-pyapp/infra/ansible
+        inventory: inventory.yml
+
