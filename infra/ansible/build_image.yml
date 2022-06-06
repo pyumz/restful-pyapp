@@ -11,13 +11,15 @@
         owner: root
         group: root
         mode: '0755'
+
     - name: copy Dockerfile
       copy:
-      src: ./Dockerfile
-      dest: /root/restful-pyapp/Dockerfile
-      owner: root
-      group: root
-      mode: '0644'
+        src: ./Dockerfile
+        dest: /root/restful-pyapp/Dockerfile
+        owner: root
+        group: root
+        mode: '0644'
+
     - name: build image
       docker_image:
         name: games-api:latest
