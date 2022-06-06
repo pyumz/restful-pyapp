@@ -14,7 +14,7 @@
 
     - name: copy Dockerfile
       copy:
-        src: ./Dockerfile
+        src: Dockerfile
         dest: /root/restful-pyapp/Dockerfile
         owner: root
         group: root
